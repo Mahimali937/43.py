@@ -1,0 +1,44 @@
+#Name:Mahim Ali
+#Email:mahim.ali32@myhunter.cuny.edu
+#Date:November 15,2022
+#This program reads NYC after school program
+
+import folium
+import pandas as pd
+
+x = int(input("Enter 1 for Borough/Community,\n2 for Grade Level / Age Group \nYour choice:"))
+map = pd.read_csv('after_school.csv')
+map2 = folium.Map(location=[40.75, -74.125])
+
+
+if x == 1:  
+    a = map.groupby('Borough/Community')
+    print(a.groups.keys())
+    y = input("Enter Borough/Community name: ")
+    z = map.groupby('Borough/Community').get_group(y)
+    for index, row in z.iterrows():
+        lat = row["Latitude"]
+        lon = row["Longitude"]
+        name = row["Name"]
+        map1 = folium.Marker(location=[lat, lon], popup= name)
+        map1.add_to(map2) 
+        map2.save(outfile= y.replace(" ", "_").lower()+ "_after_school.html") 
+        
+elif x == 2:
+    a = map.groupby('Grade Level / Age Group')
+    print(a.groups.keys())
+    y = input("Enter Grade Level / Age Group name: ")
+    z = map.groupby('Grade Level / Age Group').get_group(y)
+    
+    for index, row in z.iterrows():
+        lat = row["Latitude"]
+        lon = row["Longitude"]
+        name = row["Name"]
+        map1 = folium.Marker(location=[lat, lon], popup= name)
+        map1.add_to(map2)
+        map2.save(outfile= y.replace(" ", "_").replace("/", "_").replace("-", "_").lower()+ "_after_school.html") 
+
+        
+map3 = map2
+map3
+
